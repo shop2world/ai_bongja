@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>봉자씨! 사랑해!</title>
+</head>
+<body>
+
+<div>
+    <h1>봉자와의 대화</h1>
+    <form id="chat-form">
+        <label for="user-input">대화하기:</label>
+        <input type="text" id="user-input" name="user-input" required>
+        <button type="button" onclick="sendMessage()">전송</button>
+    </form>
+    <h3>봉자 용돈주기</h3>
+    <div id="chat-history">
+        <!-- Chat history will be displayed here -->
+    </div>
+
+    <script>
+        function sendMessage() {
+            // Get user input
+            var userInput = document.getElementById("user-input").value;
+
+            // Send user input to the server using fetch and POST method
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'human_input=' + userInput
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Display the response in the chat history
+                var chatHistory = document.getElementById("chat-history");
+                var userMessage = document.createElement("p");
+                userMessage.textContent = "You: " + userInput;
+                var botMessage = document.createElement("p");
+                botMessage.textContent = "봉자: " + data;  
+
+                chatHistory.appendChild(userMessage);
+                chatHistory.appendChild(botMessage);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</div>
+
+</body>
+</html>
